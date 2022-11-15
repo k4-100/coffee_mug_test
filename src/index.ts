@@ -1,5 +1,7 @@
-import express from "express";
+import express, { json } from "express";
 import mysql from "mysql";
+
+import * as UTL from "./utl";
 
 const app = express();
 const PORT: number = 5000;
@@ -17,14 +19,34 @@ mysqlConnection.connect((err) => {
   console.log("Connected to mysql database");
 });
 
-app.get("/api/v1/products", (req, res) => {
-  mysqlConnection.query("SELECT * FROM ProductsTAB;", (err, result) => {
-    if (err) throw err;
+app.get("/api/v1/products", async (req, res) => {
+  let errorHappened: boolean = false;
 
-    return res.status(200).json({
-      data: result,
-      status: true,
+  const data = await UTL.queryPromise(
+    mysqlConnection,
+    "SELECT * FROM ProductsTAB;"
+  )
+    // .then((dt) => {
+    //   UTL.queryPromise(
+    //     mysqlConnection,
+    //     "INSERT INTO roductsTAB(Name,Price) VALUES('Apple',1.1)"
+    //   );
+    //   return dt;
+    // })
+
+    .catch((err) => {
+      console.log("err: ", err);
+      errorHappened = true;
     });
+
+  if (errorHappened)
+    return res.status(404).json({
+      status: false,
+      msg: "querry failed",
+    });
+  res.status(200).json({
+    status: true,
+    data,
   });
 });
 
