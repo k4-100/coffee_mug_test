@@ -19,25 +19,51 @@ mysqlConnection.connect((err) => {
   console.log("Connected to mysql database");
 });
 
+app.get("/api/v1/product/:id", async (req, res) => {
+  let errorHappened: boolean = false;
+  const id = Number(req.params.id);
+  if (!id)
+    return res.status(404).json({
+      msg: "id couldn't be parsed",
+      status: false,
+    });
+
+  const data = await UTL.queryPromise(
+    mysqlConnection,
+    "SELECT * FROM ProductsTAB;"
+  ).catch((err) => {
+    console.log("err: ", err);
+    errorHappened = true;
+  });
+
+  if (errorHappened)
+    return res.status(404).json({
+      msg: "querry failed",
+      status: false,
+    });
+  res.status(200).json({
+    status: true,
+    data,
+  });
+});
+
+app.all("/api/v1/product", async (req, res) => {
+  return res.status(404).json({
+    msg: "no id provided",
+    status: false,
+  });
+});
+
 app.get("/api/v1/products", async (req, res) => {
   let errorHappened: boolean = false;
 
   const data = await UTL.queryPromise(
     mysqlConnection,
     "SELECT * FROM ProductsTAB;"
-  )
-    // .then((dt) => {
-    //   UTL.queryPromise(
-    //     mysqlConnection,
-    //     "INSERT INTO roductsTAB(Name,Price) VALUES('Apple',1.1)"
-    //   );
-    //   return dt;
-    // })
-
-    .catch((err) => {
-      console.log("err: ", err);
-      errorHappened = true;
-    });
+  ).catch((err) => {
+    console.log("err: ", err);
+    errorHappened = true;
+  });
 
   if (errorHappened)
     return res.status(404).json({
@@ -52,15 +78,15 @@ app.get("/api/v1/products", async (req, res) => {
 
 app.get("/api/v1", (req, res) => {
   res.status(200).json({
-    msg: "api route",
     status: true,
+    msg: "api route",
   });
 });
 
 app.all("*", (req, res) => {
   res.status(404).json({
-    msg: "route is unreachable",
     status: false,
+    msg: "route is unreachable",
   });
 });
 
