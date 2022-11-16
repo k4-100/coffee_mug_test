@@ -48,9 +48,9 @@ export async function putUpdatedProduct(
 ): Promise<unknown> {
   return queryPromise(
     connection,
-    `UPDATE ProductsTAB SET ${name ? `name='${name},'` : ""}, ${
+    `UPDATE ProductsTAB SET ${name ? `name='${name}'` : ""}, ${
       price ? `price=${price},` : ""
-    } UpdateDate = NOW()`
+    } UpdateDate = NOW() WHERE id=${id}`
   );
 }
 

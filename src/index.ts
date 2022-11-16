@@ -1,6 +1,8 @@
 import express from "express";
 import mysql from "mysql";
 
+import bodyParser from "body-parser";
+
 import * as UTL from "./utl";
 
 const app = express();
@@ -20,6 +22,7 @@ mysqlConnection.connect((err) => {
 });
 
 // middleware
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/api/v1/product/:id", async (req, res) => {
@@ -61,6 +64,32 @@ app.post("/api/v1/product", async (req, res) => {
       errorHappened = true;
     }
   );
+
+  if (errorHappened)
+    return res.status(404).json({
+      msg: "querry failed",
+      status: false,
+    });
+  res.status(200).json({
+    status: true,
+    data,
+  });
+});
+
+app.put("/api/v1/product/:id", async (req, res) => {
+  let errorHappened: boolean = false;
+  const id = Number(req.params.id);
+  const { name, price } = req.body;
+
+  const data = await UTL.putUpdatedProduct(
+    mysqlConnection,
+    id,
+    name,
+    price
+  ).catch((err) => {
+    console.log("err: ", err);
+    errorHappened = true;
+  });
 
   if (errorHappened)
     return res.status(404).json({
