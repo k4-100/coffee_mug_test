@@ -102,6 +102,31 @@ app.put("/api/v1/product/:id", async (req, res) => {
   });
 });
 
+app.delete("/api/v1/product/:id", async (req, res) => {
+  let errorHappened: boolean = false;
+  const id = Number(req.params.id);
+  if (!id)
+    return res.status(404).json({
+      msg: "id couldn't be parsed",
+      status: false,
+    });
+
+  const data = await UTL.deleteProduct(mysqlConnection, id).catch((err) => {
+    console.log("err: ", err);
+    errorHappened = true;
+  });
+
+  if (errorHappened)
+    return res.status(404).json({
+      msg: "querry failed",
+      status: false,
+    });
+  res.status(200).json({
+    status: true,
+    data,
+  });
+});
+
 app.all("/api/v1/product", async (req, res) => {
   return res.status(404).json({
     msg: "no id provided",
