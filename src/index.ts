@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import mysql from "mysql";
 
 import * as UTL from "./utl";
@@ -19,6 +19,9 @@ mysqlConnection.connect((err) => {
   console.log("Connected to mysql database");
 });
 
+// middleware
+app.use(express.json());
+
 app.get("/api/v1/product/:id", async (req, res) => {
   let errorHappened: boolean = false;
   const id = Number(req.params.id);
@@ -35,6 +38,29 @@ app.get("/api/v1/product/:id", async (req, res) => {
     console.log("err: ", err);
     errorHappened = true;
   });
+
+  if (errorHappened)
+    return res.status(404).json({
+      msg: "querry failed",
+      status: false,
+    });
+  res.status(200).json({
+    status: true,
+    data,
+  });
+});
+
+app.post("/api/v1/product", async (req, res) => {
+  let errorHappened: boolean = false;
+  // const id = Number(req.params.id);
+  const { name, price } = req.body;
+
+  const data = await UTL.postProduct(mysqlConnection, name, price).catch(
+    (err) => {
+      console.log("err: ", err);
+      errorHappened = true;
+    }
+  );
 
   if (errorHappened)
     return res.status(404).json({

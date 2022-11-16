@@ -68,7 +68,7 @@ export async function postProduct(
 ): Promise<unknown> {
   return queryPromise(
     connection,
-    `INSERT INTO ProductsTAB WHERE name='${name}' AND price=number`
+    `INSERT INTO ProductsTAB(Name,Price) VALUES('${name}',${price})`
   );
 }
 
