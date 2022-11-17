@@ -1,5 +1,5 @@
 
-CREATE USER 'coffe_mug_test'@'localhost' IDENTIFIED WITH mysql_native_password BY "1234";
+CREATE USER 'coffee_mug_test'@'localhost' IDENTIFIED WITH mysql_native_password BY "1234";
 GRANT ALL PRIVILEGES ON ProductsDB.ProductsTAB TO 'coffee_mug_test'@'localhost';
 
 FLUSH PRIVILEGES;
@@ -10,7 +10,7 @@ USE ProductsDB;
 
 CREATE TABLE ProductsTAB(
   Id INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(255) NOT NULL,
+  Name VARCHAR(100) NOT NULL,
   Price FLOAT NOT NULL, 
   UpdateDate DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY(Id)

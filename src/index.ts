@@ -23,8 +23,8 @@ mysqlConnection.connect((err) => {
 });
 
 // middleware
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/api/v1/product/:id", async (req, res) => {
   let errorHappened: boolean = false;
@@ -58,6 +58,8 @@ app.post("/api/v1/product", async (req, res) => {
   let errorHappened: boolean = false;
   // const id = Number(req.params.id);
   const { name, price } = req.body;
+
+  console.log("req.body: ", req.body);
 
   const data = await UTL.postProduct(mysqlConnection, name, price).catch(
     (err) => {
