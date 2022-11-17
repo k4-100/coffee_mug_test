@@ -82,5 +82,5 @@ export async function deleteProduct(
   connection: mysql.Connection,
   id: number
 ): Promise<unknown> {
-  return queryPromise(connection, `SELECT * FROM ProductsTAB WHERE id=${id};`);
+  return queryPromise(connection, `DELETE FROM ProductsTAB WHERE id=${id};`);
 }

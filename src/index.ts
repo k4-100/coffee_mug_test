@@ -1,12 +1,13 @@
 import express from "express";
 import mysql from "mysql";
-
 import bodyParser from "body-parser";
-
+import * as dotenv from "dotenv";
 import * as UTL from "./utl";
 
 const app = express();
-const PORT: number = 5000;
+dotenv.config({ path: "./.env" });
+
+const PORT: number = Number(process.env.PORT) || 3000;
 const HOSTNAME: string = "127.0.0.1";
 
 const mysqlConnection = mysql.createConnection({
@@ -26,6 +27,7 @@ mysqlConnection.connect((err) => {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// GET Product data by id
 app.get("/api/v1/product/:id", async (req, res) => {
   let errorHappened: boolean = false;
   const id = Number(req.params.id);
@@ -54,6 +56,7 @@ app.get("/api/v1/product/:id", async (req, res) => {
   });
 });
 
+// POST Product
 app.post("/api/v1/product", async (req, res) => {
   let errorHappened: boolean = false;
   // const id = Number(req.params.id);
@@ -79,6 +82,7 @@ app.post("/api/v1/product", async (req, res) => {
   });
 });
 
+// PUT (update) Product on id
 app.put("/api/v1/product/:id", async (req, res) => {
   let errorHappened: boolean = false;
   const id = Number(req.params.id);
@@ -105,6 +109,7 @@ app.put("/api/v1/product/:id", async (req, res) => {
   });
 });
 
+// DELETE Product
 app.delete("/api/v1/product/:id", async (req, res) => {
   let errorHappened: boolean = false;
   const id = Number(req.params.id);
@@ -130,6 +135,7 @@ app.delete("/api/v1/product/:id", async (req, res) => {
   });
 });
 
+// route for root of the product route (if something goes wrong)
 app.all("/api/v1/product", async (req, res) => {
   return res.status(404).json({
     msg: "no id provided",
