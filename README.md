@@ -79,3 +79,4 @@ gdzie PORT to `5000`, zgodnie z plikiem `.env` w rootcie projektu
 1. api obsługuje body w `json`, albo w `x-wwww-form-urlencoded`, z następującymi parametrami:
    `name`: `tekst`
    `price`: `liczba`
+2. requesty testowane na wersji desktopowej Postman
