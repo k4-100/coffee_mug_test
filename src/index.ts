@@ -11,9 +11,10 @@ const HOSTNAME: string = "127.0.0.1";
 
 const mysqlConnection = mysql.createConnection({
   host: HOSTNAME,
-  user: "root",
+  user: "coffee_mug_test",
   password: "1234",
   database: "ProductsDB",
+  insecureAuth: true,
 });
 
 mysqlConnection.connect((err) => {

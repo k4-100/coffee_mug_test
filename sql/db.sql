@@ -1,4 +1,8 @@
 
+CREATE USER 'coffe_mug_test'@'localhost' IDENTIFIED WITH mysql_native_password BY "1234";
+GRANT ALL PRIVILEGES ON ProductsDB.ProductsTAB TO 'coffee_mug_test'@'localhost';
+
+FLUSH PRIVILEGES;
 
 CREATE DATABASE ProductsDB;
 USE ProductsDB;
